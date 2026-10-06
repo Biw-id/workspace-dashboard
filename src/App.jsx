@@ -1,28 +1,38 @@
+import { useState } from 'react'
 import Sidebar from './components/Sidebar'
 import StatCard from './components/StatCard'
 import TaskList from './components/TaskList'
+import NewTaskModal from './components/NewTaskModal'
 
 function App() {
+  const [tasks, setTasks] = useState([
+    { id: 1, title: 'Export Figma Tokens to Tailwind v4 Theme', category: 'Design System', status: 'Completed', priority: 'High' },
+    { id: 2, title: 'Refactor StatCard Component Elevation to Flat-Border', category: 'Core UI', status: 'Completed', priority: 'High' },
+    { id: 3, title: 'Implement DM Sans & General Sans Typography Hierarchy', category: 'Typography', status: 'In Progress', priority: 'Medium' },
+    { id: 4, title: 'Build Modal Dialog for New Design System Upload', category: 'Feature', status: 'In Progress', priority: 'Low' }
+  ])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  
   return (
-    <div className="min-h-screen bg-[#FAFAFA] text-[#0A0A0A] flex font-['DM_Sans',sans-serif]">
+    <div className="min-h-screen bg-background text-text-primary flex font-['DM_Sans',sans-serif]">
       {/* Sidebar Navigation */}
       <Sidebar />
 
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto">
         {/* Top Sticky Header */}
-        <header className="sticky top-0 z-30 h-14 bg-white/80 backdrop-blur-md border-b border-[#E8E8EC] px-6 sm:px-8 flex items-center justify-between">
+        <header className="sticky top-0 z-30 h-14 bg-white/80 backdrop-blur-md border-b border-border-subtle px-6 sm:px-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-[13px] font-medium text-[#6B6B6B]">Design Systems</span>
-            <span className="text-[#9C9C9C]">/</span>
-            <span className="text-[13px] font-semibold text-[#0A0A0A]">Overview</span>
+            <span className="text-base font-medium text-text-secondary">Design Systems</span>
+            <span className="text-neutral-muted">/</span>
+            <span className="text-base font-semibold text-text-primary">Overview</span>
           </div>
 
           <div className="flex items-center gap-3">
             {/* ⌘K Search trigger placeholder */}
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-[6px] border border-[#E8E8EC] bg-[#FAFAFA] text-[13px] text-[#9C9C9C]">
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-md border border-border-subtle bg-background text-base text-neutral-muted">
               <span>Search systems...</span>
-              <kbd className="px-1.5 py-0.5 rounded-[4px] bg-white border border-[#E8E8EC] text-[10px] font-mono text-[#6B6B6B]">⌘K</kbd>
+              <kbd className="px-1.5 py-0.5 rounded-sm bg-white border border-border-subtle text-2xs font-mono text-text-secondary">⌘K</kbd>
             </div>
           </div>
         </header>
@@ -31,18 +41,18 @@ function App() {
         <div className="max-w-[1280px] mx-auto p-6 sm:p-8">
           
           {/* Section Heading & Primary CTA */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-8 border-b border-[#E8E8EC]">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-8 border-b border-border-subtle">
             <div>
-              <h1 className="font-['General_Sans',sans-serif] text-[32px] font-bold tracking-[-0.03em] text-[#0A0A0A] leading-tight">
+              <h1 className="font-['General_Sans',sans-serif] text-4xl font-bold tracking-[-0.03em] text-text-primary leading-tight">
                 Design System Manager
               </h1>
-              <p className="text-[15px] text-[#6B6B6B] mt-1">
+              <p className="text-xl text-text-secondary mt-1">
                 Editorial precision interface for managing and distributing design tokens.
               </p>
             </div>
 
             {/* Primary Button adhering to Genesis: 6px radius, hover glow, 1px lift */}
-            <button className="h-[38px] px-4 rounded-[6px] bg-[#6366F1] hover:bg-[#4F46E5] text-white text-[14px] font-medium transition duration-200 hover:-translate-y-[1px] hover:shadow-[0_4px_12px_rgba(99,102,241,0.35)] flex items-center gap-2">
+            <button onClick={() => setIsModalOpen(true)} className="h-[38px] px-4 rounded-md bg-primary hover:bg-primary-hover text-white text-lg font-medium transition duration-200 hover:-translate-y-[1px] hover:shadow-[0_4px_12px_rgba(99,102,241,0.35)] flex items-center gap-2">
               <span>+ New System File</span>
             </button>
           </div>
@@ -74,10 +84,14 @@ function App() {
 
           {/* Interactive Task List */}
           <div className="mt-8">
-            <TaskList />
+            <TaskList tasks={tasks} setTasks={setTasks} />
           </div>
-
         </div>
+        <NewTaskModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)}
+          onAddTask={(newTask) => setTasks([...tasks,newTask])} 
+          />
       </main>
     </div>
   )
