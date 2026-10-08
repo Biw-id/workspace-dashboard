@@ -1,22 +1,35 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Sidebar from './components/Sidebar'
 import StatCard from './components/StatCard'
 import TaskList from './components/TaskList'
 import NewTaskModal from './components/NewTaskModal'
 
 function App() {
-  const [tasks, setTasks] = useState([
-    { id: 1, title: 'Export Figma Tokens to Tailwind v4 Theme', category: 'Design System', status: 'Completed', priority: 'High' },
-    { id: 2, title: 'Refactor StatCard Component Elevation to Flat-Border', category: 'Core UI', status: 'Completed', priority: 'High' },
-    { id: 3, title: 'Implement DM Sans & General Sans Typography Hierarchy', category: 'Typography', status: 'In Progress', priority: 'Medium' },
-    { id: 4, title: 'Build Modal Dialog for New Design System Upload', category: 'Feature', status: 'In Progress', priority: 'Low' }
-  ])
+  const [tasks, setTasks] = useState(() => {
+    const saved = localStorage.getItem('genesis_tasks')
+    if (saved) {
+      return JSON.parse(saved)
+    }
+    
+    return [
+      { id: 1, title: 'Export Figma Tokens to Tailwind v4 Theme', category: 'Design System', status: 'Completed', priority: 'High' },
+      { id: 2, title: 'Refactor StatCard Component Elevation to Flat-Border', category: 'Core UI', status: 'Completed', priority: 'High' },
+      { id: 3, title: 'Implement DM Sans & General Sans Typography Hierarchy', category: 'Typography', status: 'In Progress', priority: 'Medium' },
+      { id: 4, title: 'Build Modal Dialog for New Design System Upload', category: 'Feature', status: 'In Progress', priority: 'Low' }
+    ]
+  })
   const [isModalOpen, setIsModalOpen] = useState(false)
+  
+  useEffect(() => {
+    localStorage.setItem('genesis_tasks', JSON.stringify(tasks))
+  }, [tasks])
+
+  const [activeTab, setActiveTab] = useState('overview')
   
   return (
     <div className="min-h-screen bg-background text-text-primary flex font-['DM_Sans',sans-serif]">
       {/* Sidebar Navigation */}
-      <Sidebar />
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto">
@@ -25,7 +38,7 @@ function App() {
           <div className="flex items-center gap-3">
             <span className="text-base font-medium text-text-secondary">Design Systems</span>
             <span className="text-neutral-muted">/</span>
-            <span className="text-base font-semibold text-text-primary">Overview</span>
+            <span className="text-base font-semibold text-text-primary capitalize">{activeTab}</span>
           </div>
 
           <div className="flex items-center gap-3">

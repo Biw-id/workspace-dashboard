@@ -1,4 +1,4 @@
-function Sidebar() {
+function Sidebar({ activeTab, setActiveTab }) {
   return (
     <aside className="w-64 bg-white border-r border-border-subtle p-6 flex flex-col justify-between hidden md:flex shrink-0">
       <div>
@@ -13,28 +13,43 @@ function Sidebar() {
         </div>
 
         {/* Navigation Menu */}
+        {/* Navigation Menu */}
         <nav className="mt-8 space-y-1">
-          <a 
-            href="#" 
-            className="flex items-center gap-3 px-3.5 py-2 rounded-md bg-primary/10 text-primary font-medium text-lg transition duration-200"
+          <button 
+            onClick={() => setActiveTab('overview')}
+            className={`w-full flex items-center gap-3 px-3.5 py-2 rounded-md font-medium text-lg transition duration-200 text-left ${
+              activeTab === 'overview' 
+                ? 'bg-primary/10 text-primary' 
+                : 'text-text-secondary hover:text-text-primary hover:bg-[#F3F4F6]'
+            }`}
           >
             <span className="text-base">📊</span>
             <span>Overview</span>
-          </a>
-          <a 
-            href="#" 
-            className="flex items-center gap-3 px-3.5 py-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-[#F3F4F6] font-medium text-lg transition duration-200"
+          </button>
+
+          <button 
+            onClick={() => setActiveTab('systems')}
+            className={`w-full flex items-center gap-3 px-3.5 py-2 rounded-md font-medium text-lg transition duration-200 text-left ${
+              activeTab === 'systems' 
+                ? 'bg-primary/10 text-primary' 
+                : 'text-text-secondary hover:text-text-primary hover:bg-[#F3F4F6]'
+            }`}
           >
             <span className="text-base">📋</span>
             <span>Design Systems</span>
-          </a>
-          <a 
-            href="#" 
-            className="flex items-center gap-3 px-3.5 py-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-[#F3F4F6] font-medium text-lg transition duration-200"
+          </button>
+
+          <button 
+            onClick={() => setActiveTab('settings')}
+            className={`w-full flex items-center gap-3 px-3.5 py-2 rounded-md font-medium text-lg transition duration-200 text-left ${
+              activeTab === 'settings' 
+                ? 'bg-primary/10 text-primary' 
+                : 'text-text-secondary hover:text-text-primary hover:bg-[#F3F4F6]'
+            }`}
           >
             <span className="text-base">⚙️</span>
             <span>Settings</span>
-          </a>
+          </button>
         </nav>
       </div>
 
