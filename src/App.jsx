@@ -70,35 +70,111 @@ function App() {
             </button>
           </div>
 
-          {/* Metric Cards Grid (24px gap, 12px radius, minimal shadows) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
-            <StatCard 
-              title="Published Systems" 
-              value="14 Systems" 
-              change="+24% this mo" 
-              isPositive={true} 
-              icon="📦" 
-            />
-            <StatCard 
-              title="Token Coverage" 
-              value="94.2%" 
-              change="+4.5% vs target" 
-              isPositive={true} 
-              icon="🎯" 
-            />
-            <StatCard 
-              title="Unresolved Issues" 
-              value="3 Issues" 
-              change="-2 vs last wk" 
-              isPositive={false} 
-              icon="⚠️" 
-            />
-          </div>
+          {/* TAB 1: OVERVIEW */}
+          {activeTab === 'overview' && (
+            <>
+              {/* Metric Cards Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+                <StatCard 
+                  title="Total Systems Tasks" 
+                  value={`${tasks.length} Tasks`} 
+                  change={`+${tasks.length} total`} 
+                  isPositive={true} 
+                  icon="📦" 
+                />
+                <StatCard 
+                  title="Completed Rate" 
+                  value={`${tasks.length > 0 ? Math.round((tasks.filter(t => t.status === 'Completed').length / tasks.length) * 100) : 0}%`} 
+                  change="Live Progress" 
+                  isPositive={true} 
+                  icon="🎯" 
+                />
+                <StatCard 
+                  title="Pending Issues" 
+                  value={`${tasks.filter(t => t.status === 'In Progress').length} Issues`} 
+                  change="Need action" 
+                  isPositive={tasks.filter(t => t.status === 'In Progress').length === 0} 
+                  icon="⚠️" 
+                />
+              </div>
 
-          {/* Interactive Task List */}
-          <div className="mt-8">
-            <TaskList tasks={tasks} setTasks={setTasks} />
-          </div>
+              {/* Interactive Task List */}
+              <div className="mt-8">
+                <TaskList tasks={tasks} setTasks={setTasks} />
+              </div>
+            </>
+          )}
+
+          {/* TAB 2: DESIGN SYSTEMS */}
+          {activeTab === 'systems' && (
+            <div className="my-8 p-8 bg-surface border border-border-subtle rounded-xl">
+              <span className="text-4xl">🎨</span>
+              <h3 className="font-['General_Sans',sans-serif] text-2xl font-bold text-text-primary mt-3">
+                Genesis Design Token Library
+              </h3>
+              <p className="text-base text-text-secondary mt-1 max-w-lg">
+                Daftar token warna, tipografi, dan radius yang terdistribusi secara global melalui Tailwind v4 theme.
+              </p>
+
+              {/* Mini Token Preview Palette */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+                <div className="p-4 rounded-md border border-border-subtle bg-background">
+                  <div className="w-full h-8 rounded-sm bg-primary mb-2"></div>
+                  <p className="text-sm font-semibold text-text-primary">Primary</p>
+                  <p className="text-xs text-text-secondary font-mono">#6366F1</p>
+                </div>
+                <div className="p-4 rounded-md border border-border-subtle bg-background">
+                  <div className="w-full h-8 rounded-sm bg-success mb-2"></div>
+                  <p className="text-sm font-semibold text-text-primary">Success</p>
+                  <p className="text-xs text-text-secondary font-mono">#10B981</p>
+                </div>
+                <div className="p-4 rounded-md border border-border-subtle bg-background">
+                  <div className="w-full h-8 rounded-sm bg-warning mb-2"></div>
+                  <p className="text-sm font-semibold text-text-primary">Warning</p>
+                  <p className="text-xs text-text-secondary font-mono">#F59E0B</p>
+                </div>
+                <div className="p-4 rounded-md border border-border-subtle bg-background">
+                  <div className="w-full h-8 rounded-sm bg-error mb-2"></div>
+                  <p className="text-sm font-semibold text-text-primary">Error</p>
+                  <p className="text-xs text-text-secondary font-mono">#EF4444</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 3: SETTINGS */}
+          {activeTab === 'settings' && (
+            <div className="my-8 p-8 bg-surface border border-border-subtle rounded-xl space-y-6">
+              <div>
+                <h3 className="font-['General_Sans',sans-serif] text-2xl font-bold text-text-primary">
+                  Workspace Preferences
+                </h3>
+                <p className="text-base text-text-secondary mt-1">
+                  Pengaturan lingkungan kerja dan profil sistem.
+                </p>
+              </div>
+
+              <div className="pt-6 border-t border-border-subtle flex items-center justify-between">
+                <div>
+                  <h4 className="font-semibold text-lg text-text-primary">Genesis Theme Engine</h4>
+                  <p className="text-base text-text-secondary">Standar desain editorial dengan Tailwind CSS v4 & General Sans.</p>
+                </div>
+                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-success/10 text-success">
+                  Active
+                </span>
+              </div>
+
+              <div className="pt-6 border-t border-border-subtle flex items-center justify-between">
+                <div>
+                  <h4 className="font-semibold text-lg text-text-primary">Local Storage Sync</h4>
+                  <p className="text-base text-text-secondary">Sinkronisasi tugas aktif ke memori browser via useEffect.</p>
+                </div>
+                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary">
+                  Synced
+                </span>
+              </div>
+            </div>
+          )}
         </div>
         <NewTaskModal 
           isOpen={isModalOpen} 
